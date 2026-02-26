@@ -1,0 +1,13 @@
+openapi: 3.0.3
+info:
+  title: FindIt Claims Service API
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK

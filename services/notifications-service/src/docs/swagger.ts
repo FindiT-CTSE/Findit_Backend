@@ -4,7 +4,8 @@ import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
 
 export function setupSwagger(app: Express) {
-  const specPath = path.join(__dirname, "openapi.yaml");
+  // ✅ points to src/docs/openapi.yaml at runtime
+  const specPath = path.join(process.cwd(), "src", "docs", "openapi.yaml");
   const swaggerDocument = YAML.load(specPath);
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

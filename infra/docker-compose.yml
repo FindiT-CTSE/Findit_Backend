@@ -19,7 +19,7 @@ services:
   core-service:
     build: ../services/core-service
     ports:
-      - "4001:4001"
+      - "4001:4000"
     env_file:
       - ../services/core-service/.env 
     depends_on:
@@ -29,7 +29,7 @@ services:
   matching-service:
     build: ../services/matching-service
     ports:
-      - "4002:4002"
+      - "4002:4000"
     env_file:
       - ../services/matching-service/.env 
     depends_on:
@@ -39,7 +39,7 @@ services:
   claims-service:
     build: ../services/claims-service
     ports:
-      - "4003:4003"
+      - "4003:4000"
     env_file:
       - ../services/claims-service/.env 
     depends_on:
@@ -49,7 +49,7 @@ services:
   notifications-service:
     build: ../services/notifications-service
     ports:
-      - "4004:4004"
+      - "4004:4000"
     env_file:
       - ../services/notifications-service/.env 
     depends_on:

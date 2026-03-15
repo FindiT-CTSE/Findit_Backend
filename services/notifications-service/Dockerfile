@@ -11,7 +11,6 @@ RUN npm run build
 # ---------- runtime stage ----------
 FROM node:20.11.1-slim
 WORKDIR /app
-
 ENV NODE_ENV=production
 
 COPY package*.json ./
@@ -19,8 +18,9 @@ RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 
-# optional: run as non-root
-USER node
+# swagger yaml
+COPY src/docs ./src/docs
 
+USER node
 EXPOSE 4000
 CMD ["node", "dist/server.js"]

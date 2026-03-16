@@ -1,6 +1,5 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -8,11 +7,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PostType {
+  LOST
+  FOUND
+}
+
+enum PostStatus {
+  OPEN
+  CLOSED
+}
+
 model User {
-  id           String   @id @default(cuid())
-  fullName     String
-  email        String   @unique
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String   @unique
   passwordHash String
-  role         String   @default("student")
-  createdAt    DateTime @default(now())
+  role      String   @default("student")
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  type        PostType
+  category    String
+  location    String
+  date        DateTime
+  description String
+  imageUrl    String?
+  status      PostStatus @default(OPEN)
+
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([type])
+  @@index([category])
+  @@index([location])
+  @@index([status])
+  @@index([userId])
 }

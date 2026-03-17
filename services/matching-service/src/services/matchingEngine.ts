@@ -94,6 +94,11 @@ export function scoreMatch(post: Post, candidate: Post): MatchResult {
 export function rankMatches(post: Post, candidates: Post[]) {
   return candidates
     .filter((candidate) => candidate.id !== post.id)
+    .filter(
+      (candidate) =>
+        post.category.trim().toLowerCase() ===
+        candidate.category.trim().toLowerCase()
+    )
     .map((candidate) => scoreMatch(post, candidate))
     .filter((m) => m.matchScore >= 30)
     .sort((a, b) => b.matchScore - a.matchScore)

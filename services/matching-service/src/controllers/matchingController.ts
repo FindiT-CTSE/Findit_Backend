@@ -1,41 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { rankMatches, Post } from "../services/matchingEngine";
-
-const mockPosts: Post[] = [
-  {
-    id: "found-001",
-    type: "FOUND",
-    category: "Laptop",
-    location: "Library",
-    date: "2026-03-16T09:00:00.000Z",
-    description: "Black Dell laptop found near main library entrance",
-    imageUrl: null,
-    status: "OPEN",
-    userId: "user-22",
-  },
-  {
-    id: "found-002",
-    type: "FOUND",
-    category: "Phone",
-    location: "Cafeteria",
-    date: "2026-03-16T12:00:00.000Z",
-    description: "Samsung phone found on cafeteria table",
-    imageUrl: null,
-    status: "OPEN",
-    userId: "user-33",
-  },
-  {
-    id: "lost-003",
-    type: "LOST",
-    category: "Bag",
-    location: "Lab 2",
-    date: "2026-03-15T10:30:00.000Z",
-    description: "Blue backpack with notebooks",
-    imageUrl: null,
-    status: "OPEN",
-    userId: "user-44",
-  },
-];
+import { fetchCandidatePosts } from "../services/coreClient";
 
 function isValidPost(post: any): post is Post {
   return (
@@ -49,7 +14,11 @@ function isValidPost(post: any): post is Post {
   );
 }
 
-export async function matchPost(req: Request, res: Response, next: NextFunction) {
+export async function matchPost(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { post } = req.body;
 
@@ -58,17 +27,21 @@ export async function matchPost(req: Request, res: Response, next: NextFunction)
     }
 
     const oppositeType = post.type === "LOST" ? "FOUND" : "LOST";
-    const candidates = mockPosts.filter(
-      (p) => p.type === oppositeType && p.status === "OPEN"
+
+    const candidates = await fetchCandidatePosts(oppositeType);
+
+    const filteredCandidates = candidates.filter(
+      (candidate) => candidate.id !== post.id && candidate.status === "OPEN"
     );
 
-    const matches = rankMatches(post, candidates);
+    const matches = rankMatches(post, filteredCandidates);
 
     return res.status(200).json({
       count: matches.length,
       matches,
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Matching error:", error?.response?.data || error?.message || error);
     next(error);
   }
 }

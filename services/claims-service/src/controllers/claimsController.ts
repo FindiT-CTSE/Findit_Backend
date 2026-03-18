@@ -181,7 +181,7 @@ export async function approveClaim(
       },
     });
 
-    await closePost(claim.postId);
+    await closePost(claim.postId, req.headers.authorization);
 
     await prisma.claim.updateMany({
       where: {

@@ -22,12 +22,15 @@ export async function getPostById(postId: string, authHeader?: string) {
   return response.data?.post || response.data;
 }
 
-export async function closePost(postId: string) {
+export async function closePost(postId: string, authHeader?: string) {
   const response = await axios.patch(
     `${env.CORE_SERVICE_URL}/posts/${postId}/close`,
     {},
     {
-      headers: internalHeaders(),
+      headers: {
+        ...internalHeaders(),
+        ...(authHeader ? { Authorization: authHeader } : {}),
+      },
       timeout: 5000,
     }
   );
@@ -42,11 +45,15 @@ export async function createNotification(data: {
   type: string;
   metadata?: unknown;
 }) {
-  return axios.post(`${env.NOTIFICATIONS_SERVICE_URL}/notify`, data, {
-    headers: {
-      ...internalHeaders(),
-      "Content-Type": "application/json",
-    },
-    timeout: 5000,
-  });
+  try {
+    await axios.post(`${env.NOTIFICATIONS_SERVICE_URL}/notify`, data, {
+      headers: {
+        ...internalHeaders(),
+        "Content-Type": "application/json",
+      },
+      timeout: 5000,
+    });
+  } catch (error: any) {
+    console.warn("[notifications] skipped:", error?.response?.status || error?.message);
+  }
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { AxiosError } from "axios";
 import { env } from "../config/env";
 
 type MatchReason = {
@@ -24,7 +25,7 @@ export async function findMatchesForPost(post: CreatedPostPayload) {
   try {
     const response = await axios.post(
       `${env.MATCHING_SERVICE_URL}/match`,
-      { post },
+      post,
       {
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +40,7 @@ export async function findMatchesForPost(post: CreatedPostPayload) {
     const matches = Array.isArray(response.data?.matches) ? response.data.matches : [];
     return matches as MatchReason[];
   } catch (error) {
-    console.error("[matching-service] request failed", error);
+    logServiceError("matching-service", error);
     return [];
   }
 }
@@ -73,6 +74,26 @@ export async function notifyPossibleMatch(params: {
       }
     );
   } catch (error) {
-    console.error("[notifications-service] request failed", error);
+    logServiceError("notifications-service", error);
   }
+}
+
+function logServiceError(serviceName: string, error: unknown) {
+  if (axios.isAxiosError(error)) {
+    const axiosError = error as AxiosError;
+    const status = axiosError.response?.status;
+    const responseData = axiosError.response?.data;
+
+    console.error(
+      `[${serviceName}] request failed`,
+      JSON.stringify({
+        message: axiosError.message,
+        status,
+        responseData,
+      })
+    );
+    return;
+  }
+
+  console.error(`[${serviceName}] request failed`, error);
 }

@@ -36,6 +36,17 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    user:
+                      id: user-id
+                      fullName: Test User
+                      email: test@uni.lk
+                      role: student
+                    token: jwt-token
         "409":
           description: Email already in use
         "400":
@@ -61,6 +72,17 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    user:
+                      id: user-id
+                      fullName: Test User
+                      email: test@uni.lk
+                      role: student
+                    token: jwt-token
         "401":
           description: Invalid credentials
         "400":
@@ -80,6 +102,29 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    post:
+                      id: post-id
+                      type: LOST
+                      category: Laptop
+                      location: Library
+                      date: 2026-03-16T10:30:00.000Z
+                      description: Black Dell laptop with stickers
+                      imageUrl: https://example.com/laptop.jpg
+                      status: OPEN
+                      userId: user-id
+                      createdAt: 2026-03-16T10:31:00.000Z
+                      updatedAt: 2026-03-16T10:31:00.000Z
+                      user:
+                        id: user-id
+                        fullName: Test User
+                        email: test@uni.lk
+                        role: student
+                    matches: []
         "400":
           description: Validation error
         "401":
@@ -116,6 +161,29 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    count: 1
+                    posts:
+                      - id: post-id
+                        type: LOST
+                        category: Laptop
+                        location: Library
+                        date: 2026-03-16T10:30:00.000Z
+                        description: Black Dell laptop with stickers
+                        imageUrl: https://example.com/laptop.jpg
+                        status: OPEN
+                        userId: user-id
+                        createdAt: 2026-03-16T10:31:00.000Z
+                        updatedAt: 2026-03-16T10:31:00.000Z
+                        user:
+                          id: user-id
+                          fullName: Test User
+                          email: test@uni.lk
+                          role: student
         "401":
           description: Unauthorized for mine=true
 
@@ -131,6 +199,28 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    post:
+                      id: post-id
+                      type: LOST
+                      category: Laptop
+                      location: Library
+                      date: 2026-03-16T10:30:00.000Z
+                      description: Black Dell laptop with stickers
+                      imageUrl: https://example.com/laptop.jpg
+                      status: OPEN
+                      userId: user-id
+                      createdAt: 2026-03-16T10:31:00.000Z
+                      updatedAt: 2026-03-16T10:31:00.000Z
+                      user:
+                        id: user-id
+                        fullName: Test User
+                        email: test@uni.lk
+                        role: student
         "404":
           description: Not found
     delete:
@@ -146,6 +236,12 @@ paths:
       responses:
         "200":
           description: Deleted
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    message: Post deleted successfully
         "401":
           description: Unauthorized
         "403":
@@ -168,6 +264,29 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    message: Post closed successfully
+                    post:
+                      id: post-id
+                      type: LOST
+                      category: Laptop
+                      location: Library
+                      date: 2026-03-16T10:30:00.000Z
+                      description: Black Dell laptop with stickers
+                      imageUrl: https://example.com/laptop.jpg
+                      status: CLOSED
+                      userId: user-id
+                      createdAt: 2026-03-16T10:31:00.000Z
+                      updatedAt: 2026-03-16T10:45:00.000Z
+                      user:
+                        id: user-id
+                        fullName: Test User
+                        email: test@uni.lk
+                        role: student
         "401":
           description: Unauthorized
         "403":

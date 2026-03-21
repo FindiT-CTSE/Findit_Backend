@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - deploy-test
   pull_request:
 
 jobs:

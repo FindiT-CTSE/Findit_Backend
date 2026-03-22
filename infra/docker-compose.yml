@@ -56,5 +56,21 @@ services:
       postgres:
         condition: service_healthy  
 
+  api-gateway:
+    build: ../services/api-gateway
+    ports:
+      - "4005:4000"
+    env_file:
+      - ../services/api-gateway/.env
+    depends_on:
+      core-service:
+        condition: service_started
+      matching-service:
+        condition: service_started
+      claims-service:
+        condition: service_started
+      notifications-service:
+        condition: service_started
+
 volumes:
   pgdata:
